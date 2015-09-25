@@ -1,3 +1,4 @@
+'use strict';
 
 var Struct = require( '../index' );
 var chai   = require( 'chai' );
@@ -7,15 +8,27 @@ describe( 'Struct', function() {
   var MyStruct;
   var struct;
   var another;
+  var fstruct;
 
   before( function() {
     MyStruct = Struct( 'lots', 'of', 'test', 'paramters', 'hooray' );
     struct   = new MyStruct( 'so', 'many', 'fancy', 'testing', 'options', 'here' );
     another  = new MyStruct( 'so', 'many', 'fancy', 'testing', 'options', 'here' );
+    fstruct   = MyStruct( 'so', 'many', 'fancy', 'testing', 'options', 'here' );
   });
 
   it( 'should be an instance of MyStruct', function() {
     expect( struct ).to.be.instanceof( MyStruct );
+  });
+
+  it( 'should NOT be an instance of MyStruct', function() {
+    expect( fstruct ).not.to.be.instanceof( MyStruct );
+  });
+
+  it( 'should accept an array of values and disperse appropriately', function() {
+    var tstruct = MyStruct( [ 'so', 'many', 'fancy', 'testing', 'options', 'here' ] );
+    expect( tstruct.deepEqual( struct ) ).to.be.true;
+    expect( tstruct.hooray ).to.eql( [ 'options', 'here' ] );
   });
 
   it( 'should return an array of values', function() {
@@ -62,12 +75,17 @@ describe( 'Struct', function() {
     expect( struct.deepEqual( another, true ) ).to.be.true
   })
 
+  it( 'should have property names and values that are equal to a non-instance', function() {
+    expect( struct.deepEqual( fstruct ) ).to.be.true;
+    expect( struct.deepEqual( fstruct, true ) ).to.be.false;
+  });
+
   it( 'should be able to add properties', function() {
     expect( struct.properties() ).to.eql( [ 'lots', 'of', 'test', 'paramters', 'hooray' ] );
 
     struct.newProperty = 3.1415;
 
-    expect( struct.properties() ).to.eql( [ 'lots', 'of', 'test', 'paramters', 'hooray', 'newProperty' ] );
+    expect( struct.properties() ).to.include( 'newProperty' );
   });
 
   it( 'should have a new length value', function() {
@@ -75,12 +93,12 @@ describe( 'Struct', function() {
   });
 
   it('should have new property values', function() {
-    expect( struct.values() ).to.eql( [ 'so', 'many', 'fancy', 'testing', [ 'options', 'here' ], 3.1415 ] );
+    expect( struct.values() ).to.include( 3.1415 );
   });
 
   it( 'should be able to add functions', function() {
     struct.myFunc = function() { console.log( 'So shiny and new' ) };
-    expect( struct.functions() ).to.eql( [ 'myFunc', 'functions', 'each', 'eachPair', 'equal', 'deepEqual', 'length', 'members', 'properties', 'select', 'toArray', 'toObject', 'values', 'valuesAt' ] );
+    expect( struct.functions() ).to.include( 'myFunc' );
   });
 
   it( 'should not equal another Struct', function() {

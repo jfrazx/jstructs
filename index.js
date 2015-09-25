@@ -4,17 +4,17 @@ var _ = require('lodash');
 function Struct() {
   var _properties = _.flattenDeep( Array.prototype.slice.call( arguments ) );
 
-  if ( !(this instanceof Struct ) ) {
-    return new Struct( _properties );
-  }
-
-  var _proto = this.constructor.prototype;
-
   function ConStruct() {
+    var self = this || {};
     var args = Array.prototype.slice.call( arguments );
 
-    if ( !( this instanceof ConStruct ) ) {
-      return new ConStruct( args );
+    if ( self instanceof ConStruct ) {
+      self.__proto__ = _.create( self.constructor.prototype, _.omit( Struct.prototype, ['constructor'] ) );
+    }
+    else {
+      _.each( Object.getOwnPropertyNames( _.omit( Struct.prototype, [ 'constructor' ] ) ), function( name ) {
+        self[ name ] = Struct.prototype[ name ];
+      });
     }
 
     // flatten to distribute arguments evenly, only one level though
@@ -22,21 +22,17 @@ function Struct() {
       args = _.flatten( args );
     }
 
-    // proto whaaaat? My attempts to manipulate the prototype chain have failed!!
-    // this.__proto__ = _.assign( this.constructor.prototype, _.omit( Struct.prototype, ['constructor'] ), _proto );
-    this.__proto__ = _.create( this.constructor.prototype, _.create( _.omit( Struct.prototype, ['constructor'] ), _proto ));
-
     // match up the Struct properties and these properties
     for ( let i = 0; i < _properties.length; i++ ) {
-      this[ _properties[ i ] ] = args[ i ];
+      self[ _properties[ i ] ] = args[ i ];
     }
 
     // if there are more passed arguments than properties, the remainder are tacked on to the last property
     if ( _properties.length < args.length ) {
-      this[ _properties[ _properties.length-1 ] ] = args.slice( _properties.length-1 );
+      self[ _properties[ _properties.length-1 ] ] = args.slice( _properties.length-1 );
     }
 
-    return this;
+    return self;
   }
 
   return ConStruct;
