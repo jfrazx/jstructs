@@ -1,6 +1,6 @@
 {
   "name": "jstructs",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "JStructs is a simple Ruby-like Struct factory for JavaScript",
   "main": "index.js",
   "directories": {
