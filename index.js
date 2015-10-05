@@ -4,6 +4,29 @@ var _ = require('lodash');
 function Struct() {
   var _properties = _.flattenDeep( Array.prototype.slice.call( arguments ) );
 
+  if ( !_properties.length )
+    throw new Error( 'you must supply at least one property name' );
+
+  for ( let i in _properties ) {
+    let type = typeof _properties[ i ];
+
+    if ( type !== 'string' ) {
+      let err = null;
+      let to_s;
+
+      try {
+        to_s = _properties[ i ].toString();
+      }
+      catch ( e ) {
+        err = true;
+      }
+
+      if ( err || type !== 'object' || to_s === '[object Object]' ) {
+        throw new Error( 'a paramter name must be a string or stringable object' );
+      }
+    }
+  }
+
   function ConStruct() {
     var self = this || {};
     var args = Array.prototype.slice.call( arguments );
@@ -24,7 +47,7 @@ function Struct() {
 
     // match up the Struct properties and these properties
     for ( let i = 0; i < _properties.length; i++ ) {
-      self[ _properties[ i ] ] = args[ i ];
+      self[ _properties[ i ].toString() ] = args[ i ];
     }
 
     // if there are more passed arguments than properties, the remainder are tacked on to the last property
@@ -74,7 +97,7 @@ Struct.prototype.eachPair = function( callback ) {
 }
 
 /**
-* Determine if 'other' Struct is equivalent  to this one, optionally include all member properties
+* Determine if 'other' Struct is equivalent to this one, optionally include all member properties
 * @param <Struct> other: The other Struct
 * @param <boolean> funcs: Optional boolean to determine if all member properties should be compared
 * @return <boolean>

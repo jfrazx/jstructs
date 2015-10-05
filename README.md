@@ -2,7 +2,7 @@
 # JStructs
 
 Structs for JavaScript, yay!!    
-A simple Ruby-like Struct factory for JavaScript
+A Ruby-like Struct factory for JavaScript
 
 ## Installation
 
@@ -87,9 +87,22 @@ Unlike Ruby Structs you can pass in more parameters than there are properties.
 ```
 var Struct  = require( 'jstructs' );
 var Numbers = Struct( 'pi', 'e', 'chaos', 'catchall' );
-var numbers = new Numbers( 3.1415, 2.71828, 4.6692, 6.2831, 1.6180, -273.15, 6.71 * Math.pow( 10, 8 ));
+var numbers = new Numbers( 3.1415, 2.71828, 4.6692, 1.6180, -273.15, 6.71 * Math.pow( 10, 8 ));
 
 numbers.values();
 
-=> [ 3.1415, 2.71828, 4.6692, [ 6.2831, 1.618, -273.15, 671000000 ] ]
+=> [ 3.1415, 2.71828, 4.6692, [ 1.618, -273.15, 671000000 ] ]
+
+numbers.catchall;
+
+=> [ 1.618, -273.15, 671000000 ]
+```
+
+You must pass at least one parameter.
+
+```
+var Struct  = require( 'jstructs' );
+var fail = Struct();
+
+=> Error
 ```

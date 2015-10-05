@@ -14,7 +14,7 @@ describe( 'Struct', function() {
     MyStruct = Struct( 'lots', 'of', 'test', 'paramters', 'hooray' );
     struct   = new MyStruct( 'so', 'many', 'fancy', 'testing', 'options', 'here' );
     another  = new MyStruct( 'so', 'many', 'fancy', 'testing', 'options', 'here' );
-    fstruct   = MyStruct( 'so', 'many', 'fancy', 'testing', 'options', 'here' );
+    fstruct  = MyStruct( 'so', 'many', 'fancy', 'testing', 'options', 'here' );
   });
 
   it( 'should be an instance of MyStruct', function() {
@@ -25,10 +25,39 @@ describe( 'Struct', function() {
     expect( fstruct ).not.to.be.instanceof( MyStruct );
   });
 
+  it( 'should throw an error when no values are given', function() {
+    expect( function() {
+      new Struct();
+    }).to.throw( 'you must supply at least one property name' );
+
+    expect( function() {
+      Struct( [] );
+    }).to.throw( 'you must supply at least one property name' );
+  });
+
   it( 'should accept an array of values and disperse appropriately', function() {
     var tstruct = MyStruct( [ 'so', 'many', 'fancy', 'testing', 'options', 'here' ] );
     expect( tstruct.deepEqual( struct ) ).to.be.true;
     expect( tstruct.hooray ).to.eql( [ 'options', 'here' ] );
+  });
+
+  it( 'should not allow non-string values as properties', function() {
+    // let myStruct = Struct( true, false, 1, {}, [] );
+    expect( function() {
+      Struct( true );
+    }).to.throw( 'a paramter name must be a string or stringable object' );
+
+    expect( function() {
+      Struct( 1 );
+    }).to.throw( 'a paramter name must be a string or stringable object' );
+
+    expect( function() {
+      Struct( [ [ 'string', false ] ] );
+    }).to.throw( 'a paramter name must be a string or stringable object' );
+
+    expect( function() {
+      Struct( {} );
+    }).to.throw( 'a paramter name must be a string or stringable object' );
   });
 
   it( 'should return an array of values', function() {
