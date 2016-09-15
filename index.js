@@ -1,8 +1,8 @@
 'use strict';
-var _ = require('lodash');
+const _ = require('lodash');
 
 function Struct() {
-  var _properties = _.flattenDeep( Array.prototype.slice.call( arguments ) );
+  const _properties = _.flattenDeep( Array.prototype.slice.call( arguments ) );
 
   if ( !_properties.length )
     throw new Error( 'you must supply at least one property name' );
@@ -11,8 +11,8 @@ function Struct() {
     let type = typeof _properties[ i ];
 
     if ( type !== 'string' ) {
-      let err = null;
-      let to_s;
+      let err  = false;
+      let to_s = null;
 
       try {
         to_s = _properties[ i ].toString();
@@ -28,31 +28,48 @@ function Struct() {
   }
 
   function ConStruct() {
-    var self = this || {};
-    var args = Array.prototype.slice.call( arguments );
+    let self     = this;
+    let args     = Array.prototype.slice.call( arguments );
+    const length = _properties.length;
 
+    /**
+    * this preserves the instance
+    * for example:
+    *
+    * if this were universally the case:
+    * const self = Object.create(Struct.prototype);
+    *
+    * then:
+    *
+    * const Struct  = require('jstructs');
+    * const Contact = Struct('name', 'email', 'phone');
+    * const contact = new Contact('Janie', 'got@gun.com', 8675309);
+    *
+    * console.log(contact instanceof Contact);
+    * => false
+    * console.log(contact instanceof Struct);
+    * => true
+    */
     if ( self instanceof ConStruct ) {
       self.__proto__ = _.create( self.constructor.prototype, _.omit( Struct.prototype, ['constructor'] ) );
     }
     else {
-      _.each( Object.getOwnPropertyNames( _.omit( Struct.prototype, [ 'constructor' ] ) ), function( name ) {
-        self[ name ] = Struct.prototype[ name ];
-      });
+      self = Object.create(Struct.prototype);
     }
 
     // flatten to distribute arguments evenly, only one level though
-    if ( args.length < _properties.length ) {
+    if ( args.length < length ) {
       args = _.flatten( args );
     }
 
     // match up the Struct properties and these properties
-    for ( let i = 0; i < _properties.length; i++ ) {
+    for ( let i = 0; i < length; i++ ) {
       self[ _properties[ i ].toString() ] = args[ i ];
     }
 
     // if there are more passed arguments than properties, the remainder are tacked on to the last property
-    if ( _properties.length < args.length ) {
-      self[ _properties[ _properties.length-1 ] ] = args.slice( _properties.length-1 );
+    if ( length < args.length ) {
+      self[ _properties[ length-1 ] ] = args.slice( length-1 );
     }
 
     return self;
@@ -69,7 +86,15 @@ function Struct() {
 */
 Struct.prototype.functions = function( context ) {
   context = context || this;
-  return _.functions( context );
+  const arr = [];
+
+  for (let i in context) {
+    if (typeof context[i] === 'function' ) {
+      arr.push(i);
+    }
+  }
+
+  return arr;
 }
 
 /**
@@ -78,9 +103,9 @@ Struct.prototype.functions = function( context ) {
 * @return <void>
 */
 Struct.prototype.each = function( callback ) {
-  _.each( this.properties() , function( property, index ) {
+  _.each( this.properties(), _.bind( function( property, index ) {
     callback( this[ property ], index );
-  }, this);
+  }, this ));
 }
 
 /**
@@ -89,7 +114,7 @@ Struct.prototype.each = function( callback ) {
 * @return <void>
 */
 Struct.prototype.eachPair = function( callback ) {
-  var props = this.properties();
+  const props = this.properties();
 
   this.each( function( value, index ) {
     callback( props[ index ], value, index );
@@ -103,7 +128,7 @@ Struct.prototype.eachPair = function( callback ) {
 * @return <boolean>
 */
 Struct.prototype.equal = function ( other, funcs ) {
-  return _.isEqual( ( funcs ? _.keys( this ) : this.properties() ),
+  return _.isEqual( ( funcs ? _.keys( this )  : this.properties() ),
                     ( funcs ? _.keys( other ) : this.properties( other ) ) );
 }
 
@@ -156,7 +181,7 @@ Struct.prototype.properties = function( context ) {
 * @return <Array[any]>
 */
 Struct.prototype.select = function( callback, objectMode ) {
-  return _.select( ( objectMode ? this.toObject() : this.values() ), callback );
+  return _.filter( ( objectMode ? this.toObject() : this.values() ), callback );
 }
 
 /**
@@ -165,7 +190,7 @@ Struct.prototype.select = function( callback, objectMode ) {
 * @return <Array[Array[any]]>
 */
 Struct.prototype.toArray = function( context ) {
-  return _.pairs( this.toObject( context ) );
+  return _.toPairs( this.toObject( context ) );
 }
 
 /**
@@ -199,10 +224,10 @@ Struct.prototype.values = function( context ) {
 * @return <Array[any]>
 */
 Struct.prototype.valuesAt = function() {
-  var indices = Array.prototype.slice.call( arguments );
-  var compact = false;
-  var values  = this.values();
-  var result;
+  let indices   = Array.prototype.slice.call( arguments );
+  let compact   = false;
+  const values  = this.values();
+  let result;
 
   if ( _.isBoolean( _.last( indices ) ) ) {
     if ( indices.pop() === true )
