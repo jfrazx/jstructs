@@ -1,29 +1,49 @@
 {
   "name": "jstructs",
-  "version": "0.1.3",
+  "version": "0.0.0-development",
   "description": "JStructs is a Ruby-like Struct factory for JavaScript",
   "main": "index.js",
   "directories": {
     "test": "test"
   },
   "dependencies": {
-    "lodash": "^4.15.0"
+    "lodash": "^4.17.4"
   },
   "devDependencies": {
     "chai": "^3.5.0",
-    "mocha": "^3.0.2"
+    "codecov": "^2.1.0",
+    "commitizen": "^2.9.6",
+    "cz-conventional-changelog": "^2.0.0",
+    "husky": "^0.13.3",
+    "istanbul": "^0.4.5",
+    "mocha": "^3.2.0",
+    "semantic-release": "^6.3.2"
   },
   "scripts": {
-    "test": "mocha -c -R spec"
+    "commit": "git-cz",
+    "test": "mocha -c -R spec",
+    "coverage:check": "istanbul check-coverage --statements 95 --functions 100 --lines 95 --branches 95",
+    "coverage:report": "codecov",
+    "coverage:test": "istanbul cover _mocha -- -R spec test",
+    "precommit": "npm run coverage:test && npm run coverage:check",
+    "prepush": "npm run coverage:test",
+    "semantic-release": "semantic-release pre && npm publish && semantic-release post"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/jfrazx/jstructs.git"
+    "url": "https://github.com/jfrazx/jstructs.git"
+  },
+  "config": {
+    "commitizen": {
+      "path": "node_modules/cz-conventional-changelog"
+    }
   },
   "keywords": [
     "simple",
     "ruby",
-    "struct"
+    "struct",
+    "dynamic",
+    "objects"
   ],
   "author": "jfrazx",
   "license": "MIT",
