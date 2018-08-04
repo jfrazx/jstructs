@@ -5,17 +5,21 @@ cache:
 notifications:
   email: false
 node_js:
-  - '7'
-  - '6'
-  - '4'
+  - '10'
+  - '9'
+  - '8'
 before_script:
   - npm prune
 script:
   - npm run coverage:test
   - npm run coverage:check
   - npm run coverage:report
-after_success:
-  - npm run semantic-release
+  - npm run coverage:post
+deploy:
+  provider: script
+  skip_cleanup: true
+  script:
+    - npx travis-deploy-once "npx semantic-release"
 branches:
   except:
     - /^v\d+\.\d+\.\d+$/
