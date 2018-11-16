@@ -7,19 +7,19 @@
     "test": "test"
   },
   "dependencies": {
-    "lodash": "^4.17.10"
+    "lodash": "^4.17.11"
   },
   "devDependencies": {
-    "chai": "^4.1.2",
-    "codecov": "^3.0.4",
-    "commitizen": "^2.10.1",
+    "chai": "^4.2.0",
+    "codecov": "^3.1.0",
+    "commitizen": "^3.0.4",
     "cz-conventional-changelog": "^2.1.0",
-    "husky": "^0.14.3",
+    "husky": "^1.1.4",
     "mocha": "^5.2.0",
-    "nyc": "^12.0.2",
-    "semantic-release": "^15.9.3",
-    "semantic-release-cli": "^4.0.6",
-    "travis-deploy-once": "^5.0.2"
+    "nyc": "^13.1.0",
+    "semantic-release": "^15.12.0",
+    "semantic-release-cli": "^4.0.9",
+    "travis-deploy-once": "^5.0.9"
   },
   "scripts": {
     "commit": "git-cz",
