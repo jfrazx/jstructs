@@ -3,7 +3,7 @@
     "node": true
   },
   "parserOptions": {
-    "ecmaVersion": 6
+    "ecmaVersion": 9
   },
   "rules": {
     "array-bracket-spacing": [2, "never"],
@@ -36,7 +36,11 @@
     "no-unused-vars": 1,
     "no-use-before-define": [2, "nofunc"],
     "object-curly-spacing": [2, "always"],
-    "quotes": [2, "single", "avoid-escape"],
+    "quotes": [
+      2,
+      "single",
+      { "avoid-escape": true, "allowTemplateLiterals": true }
+    ],
     "semi": [2, "always"],
     "keyword-spacing": [
       2,

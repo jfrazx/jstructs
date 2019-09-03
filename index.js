@@ -21,7 +21,7 @@ function Struct() {
 
       if (err || toS === '[object Object]') {
         throw new Error(
-          'a parameter name must be a string or stringable object'
+          `[JStruct Error]: a parameter name must be a string or stringable object`
         );
       }
     }
@@ -85,7 +85,7 @@ function Struct() {
  * @param <Struct> context: optional other Struct to get function names
  * @return <Array[string]>
  */
-Struct.prototype.functions = function(context) {
+Struct.prototype.functions = function (context) {
   context = context || this;
   const arr = [];
 
@@ -103,7 +103,7 @@ Struct.prototype.functions = function(context) {
  * @param <Function> callback: The callback unto which values are passed
  * @return <void>
  */
-Struct.prototype.each = function(callback) {
+Struct.prototype.each = function (callback) {
   _.each(this.properties(), (property, index) => {
     callback(this[property], index);
   });
@@ -114,7 +114,7 @@ Struct.prototype.each = function(callback) {
  * @param <Function> callback: The callback unto which values are passed
  * @return <void>
  */
-Struct.prototype.eachPair = function(callback) {
+Struct.prototype.eachPair = function (callback) {
   const props = this.properties();
 
   this.each((value, index) => {
@@ -128,7 +128,7 @@ Struct.prototype.eachPair = function(callback) {
  * @param <boolean> funcs: Optional boolean to determine if all member properties should be compared
  * @return <boolean>
  */
-Struct.prototype.equal = function(other, funcs) {
+Struct.prototype.equal = function (other, funcs) {
   return _.isEqual(
     funcs ? _.keys(this) : this.properties(),
     funcs ? _.keys(other) : this.properties(other)
@@ -140,7 +140,7 @@ Struct.prototype.equal = function(other, funcs) {
  * @param <Struct> other: The other Struct
  * @return <boolean>
  */
-Struct.prototype.deepEqual = function(other, funcs) {
+Struct.prototype.deepEqual = function (other, funcs) {
   return _.isEqual(
     funcs ? this : this.toObject(),
     funcs ? other : this.toObject(other)
@@ -152,7 +152,7 @@ Struct.prototype.deepEqual = function(other, funcs) {
  * @param <Struct> context: optional other Struct to get length
  * @return <number>
  */
-Struct.prototype.length = function(context) {
+Struct.prototype.length = function (context) {
   return this.properties(context).length;
 };
 
@@ -161,7 +161,7 @@ Struct.prototype.length = function(context) {
  * @param <Struct> context: optional other Struct to get member names
  * @return <Array[string]>
  */
-Struct.prototype.members = function(context) {
+Struct.prototype.members = function (context) {
   context = context || this;
   return _.union(this.functions(context), _.keys(context));
 };
@@ -171,7 +171,7 @@ Struct.prototype.members = function(context) {
  * @param <Struct> context: The item in which to acquire property names
  * @return <Array[string]>
  */
-Struct.prototype.properties = function(context) {
+Struct.prototype.properties = function (context) {
   context = context || this;
 
   return _.reject(this.members(context), member => isFunction(context[member]));
@@ -183,7 +183,7 @@ Struct.prototype.properties = function(context) {
  * @param <boolean> objectMode: Should we select from key/values or just values ?
  * @return <Array[any]>
  */
-Struct.prototype.select = function(callback, objectMode) {
+Struct.prototype.select = function (callback, objectMode) {
   return _.filter(objectMode ? this.toObject() : this.values(), callback);
 };
 
@@ -192,7 +192,7 @@ Struct.prototype.select = function(callback, objectMode) {
  * @param <Struct> context: optional other Struct to get pair array
  * @return <Array[Array[any]]>
  */
-Struct.prototype.toArray = function(context) {
+Struct.prototype.toArray = function (context) {
   return _.toPairs(this.toObject(context));
 };
 
@@ -201,7 +201,7 @@ Struct.prototype.toArray = function(context) {
  * @param <Struct> context: optional Struct to make into object
  * @return <Object{any}>
  */
-Struct.prototype.toObject = function(context) {
+Struct.prototype.toObject = function (context) {
   context = context || this;
 
   return _.omit(context, this.functions(context));
@@ -212,7 +212,7 @@ Struct.prototype.toObject = function(context) {
  * @param <Struct> context: optional Struct to retrieve values
  * @return <Array[any]>
  */
-Struct.prototype.values = function(context) {
+Struct.prototype.values = function (context) {
   context = context || this;
 
   return _.map(this.properties(context), property => context[property]);
@@ -224,7 +224,7 @@ Struct.prototype.values = function(context) {
  * @param <boolean> compact: Optional last value that determines if falsey values should be removed
  * @return <Array[any]>
  */
-Struct.prototype.valuesAt = function() {
+Struct.prototype.valuesAt = function () {
   const indices = Array.prototype.slice.call(arguments);
   const values = this.values();
   let compact = false;

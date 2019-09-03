@@ -10,4 +10,6 @@ test/
 .prettierrc
 travis.yml
 *.lcov
+.gitignore
 .releaserc
+yarn.lock
