@@ -1,18 +1,22 @@
-
 # JStructs
+
 [![dependencies Status](https://david-dm.org/jfrazx/jstructs/status.svg)](https://david-dm.org/jfrazx/jstructs)
 [![devDependencies Status](https://david-dm.org/jfrazx/jstructs/dev-status.svg)](https://david-dm.org/jfrazx/jstructs?type=dev)
 [![License](https://img.shields.io/github/license/jfrazx/jstructs.svg?style=plastic)]()
-[![Downloads Total](https://img.shields.io/npm/dt/jstructs.svg?style=plastic)](https://www.npmjs.com/package/jstructs)    
+[![Downloads Total](https://img.shields.io/npm/dt/jstructs.svg?style=plastic)](https://www.npmjs.com/package/jstructs)  
 [![Codecov branch](https://img.shields.io/codecov/c/github/jfrazx/jstructs/master.svg?style=plastic)](https://codecov.io/gh/jfrazx/jstructs)
 [![Travis branch](https://img.shields.io/travis/jfrazx/jstructs/master.svg?style=plastic)](https://travis-ci.org/jfrazx/jstructs)
 
-Structs for JavaScript, yay!!    
+Structs for JavaScript, yay!!  
 A Ruby-like Struct factory for JavaScript
 
 ## Installation
 
-npm install jstructs [--save]
+`npm install jstructs [--save]`
+
+or
+
+`yarn install jstructs`
 
 ## Usage
 

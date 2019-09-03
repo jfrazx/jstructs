@@ -226,14 +226,8 @@ Struct.prototype.values = function (context) {
  */
 Struct.prototype.valuesAt = function () {
   const indices = Array.prototype.slice.call(arguments);
+  const compact = _.isBoolean(_.last(indices)) && indices.pop();
   const values = this.values();
-  let compact = false;
-
-  if (_.isBoolean(_.last(indices))) {
-    if (indices.pop()) {
-      compact = !compact;
-    }
-  }
 
   const result = _.map(indices, value => values[value]);
 
