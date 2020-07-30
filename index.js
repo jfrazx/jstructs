@@ -65,8 +65,9 @@ function Struct() {
     }
 
     // match up the Struct properties and these properties
-    for (let i = 0; i < length; i++) {
-      self[_properties[i].toString()] = args[i];
+    for (const [index, property] of _properties.entries()) {
+      self[property.toString()] = args[index];
+
     }
 
     // if there are more passed arguments than properties, the remainder are tacked on to the last property
